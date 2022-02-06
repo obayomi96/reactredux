@@ -1,25 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import React, {useEffect, useState} from 'react';
+import { Box } from '@mui/material';
+import { connect } from 'react-redux';
+import DataTable from './components/UserTable';
+import { getUsers } from './store/actions/users'
 
-function App() {
+function App(props) {
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+     async function fetchData() {
+      setUserData(props.users && props.users)
+    }
+    fetchData();
+  }, [props.users])
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Box>
+        <DataTable users={userData} />
+      </Box>
     </div>
   );
 }
 
-export default App;
+const mapStateToProps = ({users}) => ({
+  users: users.users,
+});
+
+export default connect(mapStateToProps, {getUsers})(App)
